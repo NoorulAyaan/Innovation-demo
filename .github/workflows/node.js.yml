@@ -1,0 +1,46 @@
+name: Node.js CI
+
+on:
+  push:
+    branches: [ "NoorulAyaan-patch-1" ]
+  pull_request:
+    branches: [ "NoorulAyaan-patch-1" ]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    strategy:
+      matrix:
+        node-version: [22.11.0]  # Test on multiple Node.js versions
+
+    steps:
+    - name: Checkout repository
+      uses: actions/checkout@v4
+
+    - name: Set up Node.js ${{ matrix.node-version }}
+      uses: actions/setup-node@v4
+      with:
+        node-version: ${{ matrix.node-version }}
+        cache: 'npm'
+
+    - name: Navigate to project directory
+      run: cd newapp  # Adjust this if the folder name is different
+
+    - name: Install dependencies
+      run: |
+        cd newapp
+        npm install -f
+
+    - name: Run tests
+      run: |
+        cd newapp
+        npm run test -- --watchAll=false  # Disable watch mode for CI
+
+    # - name: Build React application
+    #   run: |
+    #     cd newapp
+    #     npm run build
+      env:
+        CI: true  # Ensure React treats this as a CI build
+      if: success()
