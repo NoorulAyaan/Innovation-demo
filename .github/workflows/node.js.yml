@@ -23,16 +23,24 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
         cache: 'npm'
-        cache-dependency-path: '**/package.json'  # Ignore missing lock file
+
+    - name: Navigate to project directory
+      run: cd newapp  # Adjust this if the folder name is different
 
     - name: Install dependencies
-      run: npm ci || npm install  # Try clean install, fallback to regular install
+      run: |
+        cd newapp
+        npm install
 
     - name: Run tests
-      run: npm test -- --watchAll=false  # Disable watch mode for CI
+      run: |
+        cd newapp
+        npm test -- --watchAll=false  # Disable watch mode for CI
 
     - name: Build React application
-      run: npm run build
+      run: |
+        cd newapp
+        npm run build
       env:
         CI: true  # Ensure React treats this as a CI build
       if: success()
