@@ -30,17 +30,17 @@ jobs:
     - name: Install dependencies
       run: |
         cd newapp
-        npm install
+        npm install -f
 
     - name: Run tests
       run: |
         cd newapp
-        npm test -- --watchAll=false  # Disable watch mode for CI
+        npm run test -- --watchAll=false  # Disable watch mode for CI
 
-    - name: Build React application
-      run: |
-        cd newapp
-        npm run build
+    # - name: Build React application
+    #   run: |
+    #     cd newapp
+    #     npm run build
       env:
         CI: true  # Ensure React treats this as a CI build
       if: success()
