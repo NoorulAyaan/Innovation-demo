@@ -26,11 +26,13 @@ jobs:
         cache-dependency-path: '**/package.json'  # Ignore missing lock file
 
     - name: Install dependencies
-      run: npm install --no-package-lock  # Bypass lock file
+      run: npm ci || npm install  # Try clean install, fallback to regular install
 
     - name: Run tests
-      run: npm test
+      run: npm test -- --watchAll=false  # Disable watch mode for CI
 
-    - name: Build application (optional)
+    - name: Build React application
       run: npm run build
+      env:
+        CI: true  # Ensure React treats this as a CI build
       if: success()
